@@ -7,7 +7,7 @@ object SparkRDDAction extends App{
   val sparkSession = SparkSession
     .builder
     .master("local")
-    .appName("RDD Creation")
+    .appName("SparkRDDAction")
     .getOrCreate()
 
   val sc = sparkSession.sparkContext

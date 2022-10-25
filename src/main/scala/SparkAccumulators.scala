@@ -5,7 +5,7 @@ object SparkAccumulators extends App {
   val sparkSession = SparkSession
     .builder
     .master("local")
-    .appName("RDD Creation")
+    .appName("SparkAccumulators")
     .getOrCreate()
 
   val sc = sparkSession.sparkContext
@@ -13,7 +13,7 @@ object SparkAccumulators extends App {
   val rangeRDD = sc.range(1, 100)
 
   /*
-  
+
   Accumulators =>
   Accumulators are variables that are only “added” to through an associative
   and commutative operation and can therefore be efficiently supported

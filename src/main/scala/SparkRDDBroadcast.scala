@@ -4,7 +4,7 @@ object SparkRDDBroadcast extends App {
   val sparkSession = SparkSession
     .builder
     .master("local")
-    .appName("RDD Creation")
+    .appName("SparkRDDBroadcast")
     .getOrCreate()
 
   val sc = sparkSession.sparkContext
