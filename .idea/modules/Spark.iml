@@ -101,6 +101,7 @@
     <orderEntry type="library" name="sbt: org.apache.parquet:parquet-format-structures:1.12.2:jar" level="project" />
     <orderEntry type="library" name="sbt: org.apache.parquet:parquet-hadoop:1.12.2:jar" level="project" />
     <orderEntry type="library" name="sbt: org.apache.parquet:parquet-jackson:1.12.2:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.apache.spark:spark-avro_2.13:3.2.1:jar" level="project" />
     <orderEntry type="library" name="sbt: org.apache.spark:spark-catalyst_2.13:3.3.0:jar" level="project" />
     <orderEntry type="library" name="sbt: org.apache.spark:spark-core_2.13:3.3.0:jar" level="project" />
     <orderEntry type="library" name="sbt: org.apache.spark:spark-kvstore_2.13:3.3.0:jar" level="project" />

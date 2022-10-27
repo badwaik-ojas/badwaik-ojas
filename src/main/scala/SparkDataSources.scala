@@ -9,8 +9,6 @@ object SparkDataSources extends App {
     .appName("SparkDataSources")
     .getOrCreate()
 
-
-
   /* This code deals with different Data Sources we need to deal with in Spark
      How to load Data from Different Data sources and Save the data in Different
      Data sources.
@@ -100,5 +98,74 @@ object SparkDataSources extends App {
    and fetching it.*/
   val testDF = sparkNewSession.table("users").show()
 
+  /* Bucketing => For file-based data source, it is also possible to bucket
+   and sort or partition the output.
+   Bucketing and sorting are applicable only to persistent tables
+
+   Buckets the output by the given columns. If specified, the output is
+   laid out on the file system similar to Hive's bucketing scheme,
+   but with a different bucket hash function and is not compatible with
+   Hive's bucketing.
+
+   This is applicable for all file-based data sources
+   */
+
+  println("Bucketing")
+  peopleDF
+    .write
+    .mode("overwrite")
+    .bucketBy(42, "name")
+    .sortBy("age")
+    .option("path","/src/main/resources/persistent_bucket")
+    .saveAsTable("people_bucketed")
+
+  /*
+  while partitioning can be used with both save and saveAsTable when using the Dataset APIs
+
+  Partitions the output by the given columns on the file system.
+  If specified, the output is laid out on the file system similar to Hive's
+  partitioning scheme.
+
+  As an example, when we partition a dataset by year and then month,
+  the directory layout would look like:
+
+  year=2016/month=01/
+  year=2016/month=02/
+  Partitioning is one of the most widely used techniques to optimize physical
+  data layout. It provides a coarse-grained index for skipping unnecessary
+  data reads when queries have predicates on the partitioned columns.
+
+  In order for partitioning to work well, the number of distinct values in
+  each column should typically be less than tens of thousands.
+   */
+
+  println("Partitioning")
+  usersDF
+    .write
+    .mode("overwrite")
+    .partitionBy("favorite_color")
+    .format("parquet")
+    .save("src/main/resources/namesPartByColor.parquet")
+
+  /*
+  It is possible to use both partitioning and bucketing for a single table
+   */
+
+  println("Bucketing & Partitioning")
+  usersDF
+    .write
+    .mode("overwrite")
+    .partitionBy("favorite_color")
+    .bucketBy(42, "name")
+    .option("path","/src/main/resources/persistent_bucket_partition")
+    .saveAsTable("users_partitioned_bucketed")
+
+  /*
+  partitionBy creates a directory structure as described in the Partition
+  Discovery section.
+  Thus, it has limited applicability to columns with high cardinality. In
+  contrast bucketBy distributes data across a fixed number of buckets
+  and can be used when the number of unique values is unbounded.
+   */
 
 }
