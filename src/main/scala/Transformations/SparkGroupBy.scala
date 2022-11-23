@@ -51,6 +51,7 @@ object SparkGroupBy extends App {
   df.groupBy("department").avg("salary").show()
   df.groupBy("department").mean("salary").show()
 
+
   //Groupby on Multiple Columns
   df.groupBy("department", "state").sum("salary", "bonus").show()
 
