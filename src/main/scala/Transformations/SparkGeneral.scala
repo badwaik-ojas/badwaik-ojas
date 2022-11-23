@@ -3,6 +3,8 @@ package Transformations
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.storage.StorageLevel
 
+import scala.Double.NaN
+
 object SparkGeneral extends App {
 
   val spark = SparkSession
@@ -18,7 +20,10 @@ object SparkGeneral extends App {
   val data = Seq(("James", "Smith", "USA", "CA"),
     ("Michael", "Rose", "USA", "NY"),
     ("Robert", "Williams", "USA", "CA"),
-    ("Maria", "Jones", "USA", "FL")
+    ("Maria", "Jones", "USA", "FL"),
+    ("James", null, "USA", "CA"),
+    ("James", "Smith", "USA", "CA"),
+    ("James", "Smith", null, "CA")
   )
   val columns = Seq("firstname", "lastname", "country", "state")
 
@@ -240,8 +245,83 @@ object SparkGeneral extends App {
   collectAsList():
   Action function is similar to collect() but it returns Java util list.
    */
-  df.collect()
+  df.collect().foreach(println)
+  df.collectAsList().forEach(println)
 
+  /*
+   explain: Prints the physical plan to the console for debugging purposes.
+   explain(true): Prints the plans (logical and physical) to the console for debugging purposes.
+   explain(mode): Prints the plans (logical and physical) with a format specified by a given explain mode.
+    simple: Print only a physical plan.
+    extended: Print both logical and physical plans.
+    codegen: Print a physical plan and generated codes if they are available.
+    cost: Print a logical plan and statistics if they are available.
+    formatted: Split explain output into two sections: a physical plan outline and node details.
+   */
+  spark.sql("select * from df").explain("codegen")
+  df.explain()
 
+  /*
+  dropDuplicates vs distinct
+  What is the difference between Spark distinct() vs dropDuplicates() methods?
+  Both these methods are used to drop duplicate rows from the DataFrame and return
+  DataFrame with unique values.
 
+  The main difference is distinct() performs on all columns whereas dropDuplicates()
+  is used on selected columns.
+   */
+
+  df.distinct().show()
+  df.dropDuplicates().show()
+  df.dropDuplicates(Seq("State")).show()
+
+  /*
+  Computes basic statistics for numeric and string columns, including count,
+  mean, stddev, min, and max. If no columns are given, this function computes
+  statistics for all numerical or string columns.
+
+  This function is meant for exploratory data analysis, as we make no guarantee
+  about the backward compatibility of the schema of the resulting Dataset. If
+  you want to programmatically compute summary statistics, use the agg function
+  instead.
+   */
+  df.describe().show()
+
+  /*
+  Computes specified statistics for numeric and string columns. Available
+  statistics are:
+  count
+  mean
+  stddev
+  min
+  max
+  arbitrary approximate percentiles specified as a percentage (e.g. 75%)
+  count_distinct
+  approx_count_distinct
+  If no statistics are given, this function computes count, mean, stddev,
+  min, approximate quartiles (percentiles at 25%, 50%, and 75%), and max.
+
+  This function is meant for exploratory data analysis, as we make no guarantee
+  about the backward compatibility of the schema of the resulting Dataset.
+   */
+  df.summary().show()
+
+  //Returns all column names and their data types as an array.
+  df.dtypes
+
+  /*
+  na:
+  Returns a DataFrameNaFunctions for working with missing data.
+
+  na.fill:
+  fills the null and NaN value with required details
+
+  ns.drop:
+  drops the rows having null value
+  drops("any or all") the any rows containing null and if "all" then drops if all the row columns are null or NaN
+   */
+  df.na.fill("NOT NULL").show()
+  df.na.drop().show()
+  df.na.drop("all")
+  df.na.replace("state",Map("CA" -> "CALIFORNIA" )).show()
 }
