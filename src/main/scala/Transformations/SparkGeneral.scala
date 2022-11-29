@@ -324,4 +324,5 @@ object SparkGeneral extends App {
   df.na.drop().show()
   df.na.drop("all")
   df.na.replace("state",Map("CA" -> "CALIFORNIA" )).show()
+
 }
