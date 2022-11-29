@@ -1,4 +1,4 @@
-package Transformations
+package SparkInAction
 
 import org.apache.spark.sql.functions.{col, lit}
 import org.apache.spark.sql.types.{StringType, StructType}

@@ -1,4 +1,4 @@
-package Transformations
+package SparkInAction
 
 import org.apache.spark.sql.SparkSession
 
@@ -91,5 +91,5 @@ object SparkCheckpoint extends App {
    */
   spark.sparkContext.setCheckpointDir("D:\\tmp\\checkpoint")
   df.checkpoint()
-  
+
 }
