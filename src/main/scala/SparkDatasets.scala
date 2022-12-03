@@ -53,7 +53,7 @@ object SparkDatasets extends App {
   //Programmatically Specifying the Schema
 
   // Create an RDD
-  val peopleRDD = spark.sparkContext.textFile("examples/src/main/resources/people.txt")
+  val peopleRDD = spark.sparkContext.textFile("src/main/resources/people.txt")
 
   // The schema is encoded in a string
   val schemaString = "name age"
@@ -80,6 +80,37 @@ object SparkDatasets extends App {
   // The results of SQL queries are DataFrames and support all the normal RDD operations
   // The columns of a row in the result can be accessed by field index or by field name
   results.map(attributes => "Name: " + attributes(0)).show()
+
+  /*
+  Datasets:
+  Spark Dataset is one of the basic data structures by SparkSQL. It helps in storing the
+  intermediate data for spark data processing. Spark dataset with row type is very
+  similar to Data frames that work as a tabular form on the Resilient distributed
+  dataset(RDD). The Datasets in Spark are known for their specific features such
+  as type-safety, immutability, schemas, performance optimization, lazy evaluation,
+  Serialization, and Garbage Collection. The Datasets are supported through Scala
+  and Java programming APIs. Spark’s dataset supports both compile-time safety and
+  optimizations, making it a preferred choice for implementation in the spark
+  framework.
+
+  RDD provides compile-time type safety, but there is an absence of automatic
+  optimization in RDD.
+
+  Dataframe provides automatic optimization, but it lacks compile-time type safety.
+
+  Dataset is added as an extension of the Dataframe. Dataset combines both RDD features
+  (i.e. compile-time type safety ) and Dataframe (i.e. Spark SQL automatic optimization ).
+
+  Dataset provides compile-time type safety. It means that the application’s syntax and
+  analysis errors will be checked at compile time before it runs.
+   */
+
+  val personSeq = Seq(Person("Ojas",32),Person("Ojal",40))
+  val toRDD = spark.sparkContext.parallelize(personSeq)
+  val toDF = toRDD.toDF()
+  val toDS = toDF.as[Person]
+  toDS.show()
+
 
 
 }
