@@ -7,7 +7,9 @@ lazy val root = (project in file("."))
     name := "Spark"
   )
 
+libraryDependencies += "org.apache.hadoop" % "hadoop-common" % "3.3.3"
 libraryDependencies += "org.apache.spark" %% "spark-core" % "3.3.0"
 libraryDependencies += "org.apache.spark" %% "spark-sql" % "3.3.0"
 libraryDependencies += "org.apache.spark" %% "spark-avro" % "3.2.1"
+libraryDependencies += "org.apache.spark" %% "spark-hive" % "3.3.0"
 

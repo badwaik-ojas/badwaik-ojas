@@ -4,19 +4,22 @@ import org.apache.spark.sql.SparkSession
 
 object Test extends App {
 
-  val spark1 = SparkSession
+  val spark = SparkSession
     .builder()
     .appName("Spark Session Demo1")
     .master("local")
+    .config("spark.sql.legacy.timeParserPolicy","LEGACY")
     .getOrCreate()
 
-  println("Spark Session Created")
+  /*
+  spark.sql.legacy.timeParserPolicy = LEGACY
+  If you want to use the legacy format in a newer version of spark(>3),
+  you need to set spark.conf.set("spark.sql.legacy.timeParserPolicy","LEGACY")
+  or spark.sql("set spark.sql.legacy.timeParserPolicy=LEGACY"), which will
+  resolve the issue.
+   */
+  spark.sql("select to_date('5/12/2022','dd/MM/yyyy')").show()
 
-  import spark1.implicits._
-  val rdd = spark1.sparkContext.textFile("src/main/resources/people.txt")
-  rdd.foreach(println)
 
-
-  val df= rdd.toDF()
 
 }

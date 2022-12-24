@@ -122,7 +122,7 @@ object SparkSQL extends App {
   partition. The values will produce gaps in the sequence.
 
   rank and dense_rank are similar to row_number, but when there are ties, they
-  will give the same value to the tied values. rank will keep the ranking, so the
+  will give the same value to the ti`ed values. rank will keep the ranking, so the
   numbering may go 1, 2, 2, 4 etc, whereas dense_rank will never give any gaps
    */
 
